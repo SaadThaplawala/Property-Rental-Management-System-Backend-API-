@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.ENUM('landlord', 'tenant', 'admin')
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'users',
+    freezeTableName: true,
     timestamps: true,
   });
   return User;

@@ -19,6 +19,16 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ['pending', 'paid']
       },
+      contract_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'contracts',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -16,11 +16,20 @@ module.exports = (sequelize, DataTypes) => {
   Contract.init({
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
-    monthlyRent: DataTypes.DECIMAL
-  }, {
+    monthlyRent: DataTypes.DECIMAL,
+    tenant_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    property_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }},{
     sequelize,
-    modelName: 'Contract',
+    modelName: 'contracts',
+    freezeTableName: true,
     timestamps: true,
-  });
+   }
+  );
   return Contract;
 };

@@ -16,10 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   payments.init({
     amount: DataTypes.DECIMAL,
     paymentDate: DataTypes.DATE,
-    status: DataTypes.STRING
+    status: DataTypes.ENUM['pending', 'paid'],
+    contract_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'payments',
+    freezeTableName: true,  
     timestamps: true,
   });
   return payments;

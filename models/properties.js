@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   properties.init({
     title: DataTypes.STRING,
-    address: DataTypes.STRING
+    address: DataTypes.STRING,
+    landlord_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'properties',
+    freezeTableName: true,
     timestamps: true,
   });
   return properties;
