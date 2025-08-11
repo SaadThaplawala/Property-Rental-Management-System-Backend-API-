@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+    
+      this.belongsTo(models.users, { foreignKey: 'landlord_id', scope: { role: 'landlord' }})// scope here is making sure only landlord from user is matched.
+      this.hasMany(models.contracts, { foreignKey: 'property_id'})
     }
   }
   properties.init({

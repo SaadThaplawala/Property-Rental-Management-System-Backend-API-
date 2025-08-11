@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.users, { foreignKey: 'tenant_id', scope: { role: 'tenant' }})
+      this.belongsTo(models.properties, { foreignKey: 'property_id'})
+      this.hasMany(models.payments, { foreignKey: 'contract_id'})
     }
   }
   Contract.init({
