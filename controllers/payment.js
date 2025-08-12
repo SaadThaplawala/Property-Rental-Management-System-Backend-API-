@@ -1,6 +1,10 @@
 'use strict';
 
 const models = require( '../models/index');
+const mailer = require('../config/transporter');
+
+
+
 
 const makePayment = async ( req ,  res ) => {
     try{
@@ -13,7 +17,11 @@ const makePayment = async ( req ,  res ) => {
         const payment = await models.payments.findOne({where: { id: paymentId },
             include: {
                 model: models.contracts,
-                where: { tenant_id: tenantId }
+                where: { tenant_id: tenantId },
+                include: {
+                    model: models.properties,
+                    attributes: ['title'],
+                }
             }}
         );
         if(!payment){
@@ -22,6 +30,22 @@ const makePayment = async ( req ,  res ) => {
         payment.status = 'paid';
         payment.paymentDate = new Date();
         await payment.save();
+
+        const tenantExists = await models.users.findOne({where: { id: tenantId, role: 'tenant'}});
+
+
+        const tenantMail = await mailer.sendMail({
+            from: '"Property Rental App" <no-reply@propertyapp.com>',
+            to: tenantExists.email,
+            subject: 'Payment recieved', 
+            text: "We have received your payment for property: " + payment.contracts.properties.title + ".",
+            html: "<b>We have received your payment for property: " + payment.contracts.properties.title + ".</b>",
+        }); 
+
+        console.log("Message sent tenant: %s", tenantMail.messageId);
+        console.log("Preview URL (tenant): %s", nodemailer.getTestMessageUrl(tenantMail));
+
+
         return res.status(200).json({
             message: 'Payment made successfully.',
             payment
