@@ -27,7 +27,7 @@ const createProperty = async ( req ,  res ) => {
                 landlord_id: property.landlord_id
             },
         });
-    } catch{
+    } catch(error){
         console.error('Error creating property:', error);
         return res.status(500).json({ message: 'Server error while creating property.' });
     }
@@ -39,7 +39,6 @@ const listAllPropertiesWithLandlord = async (req, res) => {
             include: [
                 {
                     model: models.users,
-                    as: 'landlord',
                     attributes: ['name', 'email']
                 }
             ]
@@ -50,7 +49,7 @@ const listAllPropertiesWithLandlord = async (req, res) => {
          });
 
         
-    } catch{
+    } catch(error){
         console.error('Error listing properties:', error);
         return res.status(500).json({ message: 'Server error during fetching properties.' });
     }

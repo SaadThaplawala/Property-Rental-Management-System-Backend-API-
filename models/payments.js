@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   payments.init({
     amount: DataTypes.DECIMAL,
     paymentDate: DataTypes.DATE,
-    status: DataTypes.ENUM['pending', 'paid'],
+    status: DataTypes.ENUM('pending', 'paid'),
     contract_id: {
       type: DataTypes.INTEGER,
       allowNull: false

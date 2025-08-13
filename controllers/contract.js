@@ -2,17 +2,24 @@
 
 const models = require( '../models/index');
 const mailer = require('../config/transporter');
+const sequelize = models.sequelize;
+const nodemailer = require('nodemailer');
 
 
 const createContract = async ( req ,  res ) => {
-
+    const t = await sequelize.transaction();
     try{ 
-        const {startDate, endDate, monthlyRent, propertyId, amount} = req.body;
+        const {startDate, endDate, monthlyRent, propertyId} = req.body;
         //taking in params so from frontend id of current user is sent.
         const tenantId = req.params.id;
         if(!startDate || !endDate || !monthlyRent || !propertyId || !tenantId){
             return res.status(400).json({ message: 'All fields are required.' });
         }
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const monthDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        const amount = monthDiff * monthlyRent;
+
         if( !amount || amount <= 0){
             return res.status(400).json({ message: 'Amount was not correctly passed.' });
         }
@@ -26,8 +33,12 @@ const createContract = async ( req ,  res ) => {
         }
 
 
-        const contract = await models.contracts.create({startDate, endDate, monthlyRent, tenant_id: tenantId, property_id: propertyId});
-        const payment = await models.payments.create({amount, paymentDate: NULL, status: 'pending', contract_id: contract.id});
+        const contract = await models.contracts.create({
+            startDate, endDate, monthlyRent, tenant_id: tenantId, property_id: propertyId
+        }, { transaction: t });
+        const payment = await models.payments.create({
+            amount, paymentDate: null, status: 'pending', contract_id: contract.id
+        }, { transaction: t });
 
         const propertyName = propertyExists.title;
 
@@ -59,13 +70,14 @@ const createContract = async ( req ,  res ) => {
         console.log("Message sent landlord: %s", landlordMail.messageId);
         console.log("Preview URL (landlord): %s", nodemailer.getTestMessageUrl(landlordMail));
 
-
+        await t.commit();
         return res.status(201).json({
             message: 'Contract with payment created successfully.',
             contract,
             payment
         }); 
-    } catch{
+    } catch(error){
+        await t.rollback();
         console.error('Error creating contract:', error);
         return res.status(500).json({ message: 'Server error while creating contract.' });
     }
@@ -77,7 +89,6 @@ const listAllContracts = async (req, res) => {
             include: [
                 {
                     model: models.users,
-                    as: 'tenant',
                     attributes: ['name', 'email']
                 },
                 {
@@ -85,7 +96,6 @@ const listAllContracts = async (req, res) => {
                     attributes: ['title', 'address'],
                     include: {
                         model: models.users,
-                        as: 'landlord',
                         attributes: ['name', 'email']
                     }
                 }
@@ -96,7 +106,7 @@ const listAllContracts = async (req, res) => {
             contracts: contracts
          });
 
-    } catch{
+    } catch(error){
         console.error('Error listing contracts:', error);
         return res.status(500).json({ message: 'Server error during fetching contracts.' });
     }

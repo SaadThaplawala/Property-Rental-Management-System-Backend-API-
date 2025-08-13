@@ -33,13 +33,13 @@ const makePayment = async ( req ,  res ) => {
 
         const tenantExists = await models.users.findOne({where: { id: tenantId, role: 'tenant'}});
 
-
+        const propertyTitle = payment.contract?.property?.title || 'Unknown property';
         const tenantMail = await mailer.sendMail({
             from: '"Property Rental App" <no-reply@propertyapp.com>',
             to: tenantExists.email,
             subject: 'Payment recieved', 
-            text: "We have received your payment for property: " + payment.contracts.properties.title + ".",
-            html: "<b>We have received your payment for property: " + payment.contracts.properties.title + ".</b>",
+            text: "We have received your payment for property: " + propertyTitle + ".",
+            html: "<b>We have received your payment for property: " + propertyTitle + ".</b>",
         }); 
 
         console.log("Message sent tenant: %s", tenantMail.messageId);
@@ -50,7 +50,7 @@ const makePayment = async ( req ,  res ) => {
             message: 'Payment made successfully.',
             payment
         });
-    } catch{
+    } catch(error){
         console.error('Error making payment:', error);
         return res.status(500).json({ message: 'Server error while making payment.' });
     }
@@ -72,7 +72,6 @@ const listAllPayments = async (req, res) => {
                 model: models.contracts,
                 include: {
                     model: models.users,
-                    as: 'tenant',
                     attributes: ['name', 'email']
                 ,
             }
@@ -83,10 +82,10 @@ const listAllPayments = async (req, res) => {
         payments: payments,
      });
 
-    }catch{
+    }catch(error){
         console.error('Error listing payments:', error);
         return res.status(500).json({ message: 'Server error during fetching payments.' });
     }
 };
 
-module.exports = {createPayment , listAllPayments, makePayment};
+module.exports = { listAllPayments, makePayment};
