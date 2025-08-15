@@ -12,9 +12,9 @@ const createContract = async ( req ,  res ) => {
         const {startDate, endDate, monthlyRent, propertyId} = req.body;
         //taking in params so from frontend id of current user is sent.
         const tenantId = req.params.id;
-        if(!startDate || !endDate || !monthlyRent || !propertyId || !tenantId){
-            return res.status(400).json({ message: 'All fields are required.' });
-        }
+        // if(!startDate || !endDate || !monthlyRent || !propertyId || !tenantId){
+        //     return res.status(400).json({ message: 'All fields are required.' });
+        // } joi validation applied
         const start = new Date(startDate);
         const end = new Date(endDate);
         const monthDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());

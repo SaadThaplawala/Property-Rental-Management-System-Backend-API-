@@ -10,10 +10,10 @@ const makePayment = async ( req ,  res ) => {
     try{
         const tenantId = req.params.id;
         const {paymentId, amount} = req.body;
-        if(!paymentId || !amount){
-            return res.status(400).json({ message: 'All fields are required.' });
+        // if(!paymentId || !amount){
+        //     return res.status(400).json({ message: 'All fields are required.' });
         
-        }
+        // }
         const payment = await models.payments.findOne({where: { id: paymentId },
             include: {
                 model: models.contracts,

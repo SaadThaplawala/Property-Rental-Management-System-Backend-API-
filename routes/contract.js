@@ -6,13 +6,11 @@ const validate = require('./validation');
 
 router.post('/:id', (req, res) => {
     const { error } = validate.contractValidator(req.body);
-    if(error){
-        const message  =  error.details[0].message;
-        return res.status(400).json({message});
-    }else{
-        contractController.createContract
-    }
-});
+
+    if(validate.handleValidationError(error, res))return;
+    next();
+    
+},contractController.createContract);
 
 
 router.get('/', contractController.listAllContracts);

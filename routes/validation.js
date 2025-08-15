@@ -2,6 +2,14 @@ const joi = require('joi');
 
 const validator = (schema) => (payload) => schema.validate(payload, {abortEarly: false});
 
+function handleValidationError(error, res) {
+    if (error && error.details && error.details[0]) {
+        const message = error.details.map(detail => detail.message);
+        return res.status(400).json({ errors: message });
+    }
+    return false;
+}
+
 const user = joi.object({
     name: joi.string().required(),
     email: joi.string().email().required(),
@@ -26,4 +34,4 @@ const contract = joi.object({
 
 })
 
-module.exports = {userValidator: validator(user), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};
+module.exports = {handleValidationError,userValidator: validator(user), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};

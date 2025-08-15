@@ -6,12 +6,12 @@ const createUsers = async ( req ,  res ) => {
     try{
 
         const {name, email, role} = req.body;
-        if(!name || !email || !role){
-            return res.status(400).json({ message: 'All fields are required.' });
-        }
-        if(role !== 'landlord' && role !== 'tenant' && role !== 'admin'){
-            return res.status(400).json({ message: 'Invalid role.' });
-        }
+        // if(!name || !email || !role){
+        //     return res.status(400).json({ message: 'All fields are required.' });
+        // }
+        // if(role !== 'landlord' && role !== 'tenant' && role !== 'admin'){
+        //     return res.status(400).json({ message: 'Invalid role.' });
+        // }
         const userexists = await models.users.findOne({where: { email }});
         if (userexists){
         return res.status(400).json({message: 'User with this email already exists.'});
