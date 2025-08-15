@@ -2,7 +2,7 @@
 
 const models = require( '../models/index');
 const mailer = require('../config/transporter');
-
+const nodemailer = require('nodemailer');
 
 
 
