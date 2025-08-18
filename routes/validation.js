@@ -10,11 +10,18 @@ function handleValidationError(error, res) {
     return false;
 }
 
-const user = joi.object({
-    name: joi.string().required(),
+const signIn = joi.object({
     email: joi.string().email().required(),
-    role: joi.string().valid('landlord', 'tenant', 'admin').required(),
+    password: joi.string().required(),
 });
+
+const signUp = joi.object({
+    name: joi.string().required(),
+    role: joi.string().valid('landlord', 'tenant', 'admin').required(),
+    email: joi.string().email().required(),
+    password: joi.string().required(),
+    confirmPassword: joi.string().required().equal(joi.ref('password')),
+})
 
 const property = joi.object({
     title: joi.string().required(),
@@ -34,4 +41,4 @@ const contract = joi.object({
 
 })
 
-module.exports = {handleValidationError,userValidator: validator(user), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};
+module.exports = {handleValidationError, signInValidator: validator(signin), signUpValidator: validator(signup), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};

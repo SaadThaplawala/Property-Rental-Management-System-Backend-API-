@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const propertyController = require('../controllers/property');
 const validate = require('./validation')
+const auth = require('../middleware/auth');
 
 router.post('/:id',(req, res) => {
     const { error } = validate.propertyValidator(req.body);
