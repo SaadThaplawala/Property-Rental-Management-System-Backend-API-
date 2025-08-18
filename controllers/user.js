@@ -45,4 +45,4 @@ const listAllUsers = async (req, res) => {
     }
 }
 
-module.exports = {createUsers , listAllUsers};
+module.exports = { listAllUsers};

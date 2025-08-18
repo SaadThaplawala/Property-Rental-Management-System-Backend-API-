@@ -4,7 +4,7 @@ const loginController = require('../controllers/login');
 const validate = require('./validation');
 
 
-router.post('/signin', (req, res) => {
+router.post('/signin', (req, res, next) => {
     const { error } = validate.signInValidator(req.body);
 
     if (validate.handleValidationError(error, res)) return;
@@ -12,7 +12,7 @@ router.post('/signin', (req, res) => {
 
 }, loginController.signIn);
 
-router.post('/signup', (req, res) => {
+router.post('/signup', (req, res, next) => {
     const { error } = validate.signUpValidator(req.body);
 
     if (validate.handleValidationError(error, res)) return;

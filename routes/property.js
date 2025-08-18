@@ -4,7 +4,7 @@ const propertyController = require('../controllers/property');
 const validate = require('./validation')
 const auth = require('../middleware/auth');
 
-router.post('/', auth.authenticateToken, (req, res) => {
+router.post('/', auth.authenticateToken, (req, res, next) => {
     const { error } = validate.propertyValidator(req.body);
 
     if(validate.handleValidationError(error, res))return;

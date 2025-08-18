@@ -41,4 +41,4 @@ const contract = joi.object({
 
 })
 
-module.exports = {handleValidationError, signInValidator: validator(signin), signUpValidator: validator(signup), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};
+module.exports = {handleValidationError, signInValidator: validator(signIn), signUpValidator: validator(signUp), propertyValidator: validator(property), paymentValidator: validator(payment), contractValidator: validator(contract)};

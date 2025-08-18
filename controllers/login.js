@@ -8,9 +8,9 @@ const signIn = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json("Email and Password required.");
-        }
+        // if (!email || !password) {
+        //     return res.status(400).json("Email and Password required.");
+        // }
 
         const user = await models.logins.findOne({ where: { email },
             include: {
@@ -48,20 +48,20 @@ const signIn = async (req, res, next) => {
 
 const signUp = async (req, res) => {
   try {
-    const { name, role, email, password, confirmPassword } = req.body;
+    const { name, role, email, password } = req.body;
 
-    if (!name || !role || !email || !password || !confirmPassword) {
-      return res.status(400).json({ message: 'All fields are required.' });
-    }
+    // if (!name || !role || !email || !password || !confirmPassword) {
+    //   return res.status(400).json({ message: 'All fields are required.' });
+    // }
 
     const userexists = await models.logins.findOne({where: { email }});
     if (userexists){
       return res.status(400).json({message: 'User with this email already exists.'});
     }
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match.' });
-    }
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({ message: 'Passwords do not match.' });
+    // }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
