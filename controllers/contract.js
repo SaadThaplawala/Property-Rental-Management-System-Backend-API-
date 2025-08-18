@@ -10,8 +10,7 @@ const createContract = async ( req ,  res ) => {
     const t = await sequelize.transaction();
     try{ 
         const {startDate, endDate, monthlyRent, propertyId} = req.body;
-        //taking in params so from frontend id of current user is sent.
-        const tenantId = req.params.id;
+        const tenantId = req.user.id;
         // if(!startDate || !endDate || !monthlyRent || !propertyId || !tenantId){
         //     return res.status(400).json({ message: 'All fields are required.' });
         // } joi validation applied

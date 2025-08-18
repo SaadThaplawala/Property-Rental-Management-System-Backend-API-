@@ -5,7 +5,7 @@ const validate = require('./validation');
 const auth = require('../middleware/auth');
 
 
-router.post('/:id', (req, res) => {
+router.post('/', auth.authenticateToken, (req, res) => {
     const { error } = validate.contractValidator(req.body);
 
     if(validate.handleValidationError(error, res))return;

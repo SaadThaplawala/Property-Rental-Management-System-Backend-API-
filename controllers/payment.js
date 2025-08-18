@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 
 const makePayment = async ( req ,  res ) => {
     try{
-        const tenantId = req.params.id;
+        const tenantId = req.user.id;
         const {paymentId, amount} = req.body;
         // if(!paymentId || !amount){
         //     return res.status(400).json({ message: 'All fields are required.' });

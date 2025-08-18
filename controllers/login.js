@@ -25,7 +25,7 @@ const signIn = async (req, res, next) => {
         const confirmPassword = await bcrypt.compare(password, user.password);
 
         if (confirmPassword) {
-            const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET, { expiresIn: '12h' });
+            const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.TOKEN_SECRET, { expiresIn: '12h' });
 
             delete user.dataValues.password;
 

@@ -4,8 +4,8 @@ const models = require( '../models/index');
 
 const createProperty = async ( req ,  res ) => {
     try{
-        //taking in params so from frontend id of current user is sent.
-        const landlordId = req.params.id;
+        
+        const landlordId = req.user.id;
         const {title, address} = req.body;
         // if(!title || !address){
         //     return res.status(400).json({ message: 'All fields are required.' });
